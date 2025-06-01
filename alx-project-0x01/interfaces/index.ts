@@ -4,3 +4,9 @@ export interface PostProps {
   title: string;
   body: string;
 }
+// interfaces/index.ts
+export interface UserProps {
+  username: string;
+  street: string;
+  catchPhrase: string;
+}
