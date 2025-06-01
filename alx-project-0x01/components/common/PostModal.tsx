@@ -1,43 +1,51 @@
-import React, { useState, useEffect } from "react";
-import { PostModalProps, PostData } from "@/interfaces";
+import React, { useState } from "react";
+import { PostData, PostModalProps } from "@/interfaces";
 
 const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, onSubmit }) => {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [post, setPost] = useState<PostData>({ title: "", body: "", userId: 0 });
 
-  useEffect(() => {
-    if (!isOpen) {
-      setTitle("");
-      setBody("");
-    }
-  }, [isOpen]);
-
-  if (!isOpen) return null;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setPost((prev) => ({ ...prev, [name]: name === "userId" ? Number(value) : value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ title, body });
-    onClose();
+    onSubmit(post);
+    setPost({ title: "", body: "", userId: 0 });
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded w-96">
-        <h2 className="text-xl font-semibold mb-4">Create New Post</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-6 rounded-md w-96">
+        <h2 className="text-xl mb-4">Add New Post</h2>
         <form onSubmit={handleSubmit}>
           <input
-            className="w-full border p-2 mb-3"
             type="text"
+            name="title"
             placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={post.title}
+            onChange={handleChange}
+            className="w-full mb-3 p-2 border rounded"
             required
           />
           <textarea
-            className="w-full border p-2 mb-3"
+            name="body"
             placeholder="Body"
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
+            value={post.body}
+            onChange={handleChange}
+            className="w-full mb-3 p-2 border rounded"
+            required
+          />
+          <input
+            type="number"
+            name="userId"
+            placeholder="User ID"
+            value={post.userId}
+            onChange={handleChange}
+            className="w-full mb-3 p-2 border rounded"
             required
           />
           <div className="flex justify-end space-x-2">
