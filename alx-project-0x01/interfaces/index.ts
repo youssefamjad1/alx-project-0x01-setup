@@ -22,3 +22,10 @@ export interface PostModalProps {
   onClose: () => void;
   onSubmit: (post: PostData) => void;
 }
+
+export interface UserModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (post: UserProps) => void;
+  user?: UserProps;
+}
